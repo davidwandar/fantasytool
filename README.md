@@ -26,6 +26,11 @@ Chrome extension for `fantasy.allsvenskan.se` that adds an enhanced mini league 
 - Chip-adjusted multipliers are included in both points and budget played
 - Double gameweeks add one extra scoring slot and one extra unit of budget for each additional fixture
 - Blank gameweeks contribute zero remaining slots and zero remaining budget for affected players
+- Auto-subs are simulated live for starters who are definite no-shows: they have `0` minutes and all of their gameweek fixtures are finished, or they have no fixture at all
+- Bench priority follows positions `12`, `13`, `14` for outfield players; the bench goalkeeper can only replace the starting goalkeeper
+- A bench player is only eligible to come in once they have recorded minutes in the gameweek
+- Auto-subs must preserve a valid formation: 1 goalkeeper, at least 3 defenders, and at least 1 forward
+- Chip multipliers do not transfer to auto-subbed replacements; only normal captain-to-vice fallback is applied
 - A scoring fixture opportunity counts as `played` if:
   - that fixture is finished, or
   - it is in progress and the player already has live minutes

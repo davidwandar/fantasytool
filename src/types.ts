@@ -18,6 +18,7 @@ export interface BootstrapElement {
     web_name: string;
     team: number;
     now_cost: number;
+    element_type: number;
 }
 
 export interface BootstrapResponse {
