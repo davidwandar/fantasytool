@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "Fantasy Tool",
+    "version": "0.1.0",
+    "description": "Adds points-per-budget standings and related mini-league insights to fantasy.allsvenskan.se.",
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "https://fantasy.allsvenskan.se/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://fantasy.allsvenskan.se/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ]
+}

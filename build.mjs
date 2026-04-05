@@ -1,0 +1,53 @@
+import { build, context } from 'esbuild';
+import { copyFileSync, mkdirSync } from 'node:fs';
+
+const watch = process.argv.includes('--watch');
+
+const shared = {
+    bundle: true,
+    format: 'iife',
+    platform: 'browser',
+    target: 'chrome120',
+    sourcemap: true,
+    logLevel: 'info',
+};
+
+const copyManifest = () => {
+    mkdirSync('dist', { recursive: true });
+    copyFileSync('manifest.json', 'dist/manifest.json');
+};
+
+const buildOptions = {
+    ...shared,
+    entryPoints: {
+        background: 'src/background.ts',
+        content: 'src/content.ts',
+    },
+    outdir: 'dist',
+};
+
+const buildAll = async () => {
+    if (watch) {
+        const ctx = await context(buildOptions);
+        await ctx.watch();
+        copyManifest();
+        console.log('Watching for changes...');
+        return;
+    }
+
+    await build({
+        ...shared,
+        entryPoints: {
+            background: 'src/background.ts',
+            content: 'src/content.ts',
+        },
+        outdir: 'dist',
+    });
+
+    copyManifest();
+};
+
+buildAll().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

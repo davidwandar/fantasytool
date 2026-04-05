@@ -1,0 +1,31 @@
+{
+  "name": "fantasytool",
+  "version": "1.0.0",
+  "description": "Chrome extension that adds points-per-budget league insights to fantasy.allsvenskan.se.",
+  "author": "David Wandar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidwandar/fantasytool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidwandar/fantasytool/issues"
+  },
+  "homepage": "https://github.com/davidwandar/fantasytool#readme",
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "tsc --noEmit",
+    "watch": "node build.mjs --watch"
+  },
+  "keywords": [
+    "chrome-extension",
+    "fantasy",
+    "allsvenskan"
+  ],
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/chrome": "^0.1.39",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.2"
+  }
+}
