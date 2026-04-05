@@ -4,6 +4,15 @@ export interface EventSummary {
     finished: boolean;
 }
 
+export interface ChipDefinition {
+    id: number;
+    name: string;
+    number: number;
+    start_event: number;
+    stop_event: number;
+    chip_type: string;
+}
+
 export interface BootstrapElement {
     id: number;
     web_name: string;
@@ -14,6 +23,7 @@ export interface BootstrapElement {
 export interface BootstrapResponse {
     events: EventSummary[];
     elements: BootstrapElement[];
+    chips: ChipDefinition[];
 }
 
 export interface LeagueStandingRow {
@@ -41,9 +51,11 @@ export interface EntryPick {
     multiplier: number;
     is_captain: boolean;
     is_vice_captain: boolean;
+    element_type?: number;
 }
 
 export interface EntryPicksResponse {
+    active_chip: string | null;
     entry_history: {
         event: number;
         points: number;

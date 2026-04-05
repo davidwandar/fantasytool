@@ -6,12 +6,13 @@ Chrome extension for `fantasy.allsvenskan.se` that adds an enhanced mini league 
 
 - Detects a league page on `fantasy.allsvenskan.se`
 - Fetches league standings, picks, fixtures, live player stats, and player prices from the public API
+- Reads chip metadata from `bootstrap-static` and each entry's active chip from the picks endpoint
 - Computes:
   - live points
   - played budget
   - points per million budget played
   - expected current gameweek points using a market-average projection
-  - starters played
+  - weighted scoring slots played
 - Augments the site's native mini league table with:
   - `Pts/M`
   - `Left to play`
@@ -21,18 +22,22 @@ Chrome extension for `fantasy.allsvenskan.se` that adds an enhanced mini league 
 
 ## Current scoring rule
 
-- Only starting XI players count toward budget played
-- Captain multiplier is included in both points and budget played
-- A starter counts as `played` if:
-  - they have live minutes greater than zero, or
-  - their team's fixture is finished
+- Any pick with a positive API `multiplier` counts toward budget played and xP
+- Chip-adjusted multipliers are included in both points and budget played
+- Double gameweeks add one extra scoring slot and one extra unit of budget for each additional fixture
+- Blank gameweeks contribute zero remaining slots and zero remaining budget for affected players
+- A scoring fixture opportunity counts as `played` if:
+  - that fixture is finished, or
+  - it is in progress and the player already has live minutes
 
 This is intentionally conservative for in-progress matches.
 
 Example:
 
-- If 4 starters have played and your captain has also played, the count is shown as `5/12` only when that means 4 normal starter slots plus the captain's double slot.
-- The captain's price is counted twice in `Played Budget`, matching the doubled points.
+- If 4 normal slots have played and your captain has also played, the count is shown as `5/12` because the captain occupies two scoring slots.
+- If `Dynamisk duo` is active, the count can become `7/14` because the captain is worth 3 slots and the vice captain 2.
+- If `Parkera bussen` is active, each defender's doubled slot weight is counted automatically from the API multiplier.
+- If one of your weighted scoring picks belongs to a team with 2 fixtures, the denominator increases accordingly, so a row can show `5/13` instead of `5/12`.
 
 ## xP model
 
