@@ -60,6 +60,12 @@ Type-check:
 npm run check
 ```
 
+Run unit tests:
+
+```bash
+npm test
+```
+
 Build:
 
 ```bash
