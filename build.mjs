@@ -14,7 +14,12 @@ const shared = {
 
 const copyManifest = () => {
     mkdirSync('dist', { recursive: true });
+    mkdirSync('dist/assets/icons', { recursive: true });
     copyFileSync('manifest.json', 'dist/manifest.json');
+    copyFileSync('assets/icons/icon16.png', 'dist/assets/icons/icon16.png');
+    copyFileSync('assets/icons/icon32.png', 'dist/assets/icons/icon32.png');
+    copyFileSync('assets/icons/icon48.png', 'dist/assets/icons/icon48.png');
+    copyFileSync('assets/icons/icon128.png', 'dist/assets/icons/icon128.png');
 };
 
 const buildOptions = {
