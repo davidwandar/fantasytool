@@ -22,6 +22,11 @@ const FORWARD = 4;
 
 type ResolvedPick = EntryPick;
 
+interface ResolvedLineup {
+    picks: ResolvedPick[];
+    autoSubApplied: boolean;
+}
+
 function isStartingPick(pick: EntryPick): boolean {
     return pick.position >= 1 && pick.position <= 11;
 }
@@ -168,7 +173,7 @@ function applyAutoSubs(
     bootstrapElements: Map<number, BootstrapElement>,
     liveElements: Map<number, EventLiveResponse['elements'][number]>,
     teamFixtures: Map<number, FixtureResponseItem[]>,
-): ResolvedPick[] {
+): ResolvedLineup {
     const lineup = picks
         .filter(isStartingPick)
         .sort((left, right) => left.position - right.position)
@@ -177,6 +182,7 @@ function applyAutoSubs(
         .filter(isBenchPick)
         .sort((left, right) => left.position - right.position)
         .map((pick) => ({ ...pick }));
+    let autoSubApplied = false;
 
     const startingGoalkeeperIndex = lineup.findIndex((pick) => getElementType(pick, bootstrapElements) === GOALKEEPER);
     const benchGoalkeeper = bench.find((pick) => getElementType(pick, bootstrapElements) === GOALKEEPER);
@@ -188,6 +194,7 @@ function applyAutoSubs(
         && isBenchPlayerEligibleForAutoSub(benchGoalkeeper, liveElements)
     ) {
         lineup[startingGoalkeeperIndex] = createSubstitutedPick(benchGoalkeeper, lineup[startingGoalkeeperIndex].position);
+        autoSubApplied = true;
     }
 
     const outfieldBench = bench.filter((pick) => getElementType(pick, bootstrapElements) !== GOALKEEPER);
@@ -215,11 +222,15 @@ function applyAutoSubs(
             }
 
             lineup[candidateIndex] = nextLineup[candidateIndex];
+            autoSubApplied = true;
             break;
         }
     }
 
-    return lineup;
+    return {
+        picks: lineup,
+        autoSubApplied,
+    };
 }
 
 function getChipBaseMultiplier(
@@ -300,7 +311,7 @@ function resolveEffectiveLineup(
     bootstrapElements: Map<number, BootstrapElement>,
     liveElements: Map<number, EventLiveResponse['elements'][number]>,
     teamFixtures: Map<number, FixtureResponseItem[]>,
-): ResolvedPick[] {
+): ResolvedLineup {
     const autoSubbedLineup = applyAutoSubs(
         picksResponse.picks,
         bootstrapElements,
@@ -308,13 +319,16 @@ function resolveEffectiveLineup(
         teamFixtures,
     );
 
-    return applyFinalMultipliers(
-        autoSubbedLineup,
-        picksResponse,
-        bootstrapElements,
-        liveElements,
-        teamFixtures,
-    );
+    return {
+        picks: applyFinalMultipliers(
+            autoSubbedLineup.picks,
+            picksResponse,
+            bootstrapElements,
+            liveElements,
+            teamFixtures,
+        ),
+        autoSubApplied: autoSubbedLineup.autoSubApplied,
+    };
 }
 
 function getCompletedFixtureCount(
@@ -354,12 +368,13 @@ export function calculateEnhancedStandingRow({
     liveElements,
     teamFixtures,
 }: CalculationContext): EnrichedStandingRow {
-    const scoringPicks = resolveEffectiveLineup(
+    const resolvedLineup = resolveEffectiveLineup(
         picksResponse,
         bootstrapElements,
         liveElements,
         teamFixtures,
-    ).filter(isScoringPick);
+    );
+    const scoringPicks = resolvedLineup.picks.filter(isScoringPick);
 
     let playedBudget = 0;
     let totalStarterBudget = 0;
@@ -411,5 +426,6 @@ export function calculateEnhancedStandingRow({
             const fixtureCount = getTeamFixturesForPick(pick, bootstrapElements, teamFixtures).length;
             return total + (slotWeight * fixtureCount);
         }, 0),
+        autoSubApplied: resolvedLineup.autoSubApplied,
     };
 }

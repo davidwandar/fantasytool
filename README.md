@@ -1,4 +1,4 @@
-# Fantasy Tool
+# Allsvenskan Fantasy Tool
 
 Chrome extension for `fantasy.allsvenskan.se` that adds an enhanced mini league table focused on points per budget played.
 

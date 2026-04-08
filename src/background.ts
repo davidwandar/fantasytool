@@ -7,7 +7,7 @@ import type {
     LeagueEnhancementPayload,
 } from './types';
 
-const LOG_PREFIX = '[Fantasy Tool]';
+const LOG_PREFIX = '[Allsvenskan Fantasy Tool]';
 const MAX_LEAGUE_ENTRIES = 50;
 
 function log(message: string, ...details: unknown[]): void {
@@ -83,7 +83,7 @@ async function buildLeagueEnhancement(leagueId: number): Promise<LeagueEnhanceme
             totalEntries: allStandingsRows.length,
             truncated: false,
             marketAveragePointsPerMillion: 0,
-            unsupportedReason: 'Fantasy Tool v1 only supports mini leagues that fit on a single standings page (50 teams max).',
+            unsupportedReason: 'Allsvenskan Fantasy Tool v1 only supports mini leagues that fit on a single standings page (50 teams max).',
         };
     }
 
