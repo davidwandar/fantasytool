@@ -1,6 +1,6 @@
 import type { ChromeMessageRequest, LeagueEnhancementPayload } from './types';
 
-const LOG_PREFIX = '[Fantasy Tool]';
+const LOG_PREFIX = '[Allsvenskan Fantasy Tool]';
 type SortMode = 'official' | 'projected';
 const NATIVE_CONTROL_ID = 'fantasy-tool-native-controls';
 const NATIVE_LOADING_ID = 'fantasy-tool-native-loading';
@@ -110,7 +110,7 @@ function getRankMaps(payload: LeagueEnhancementPayload): {
 
 function formatLeftToPlay(row: LeagueEnhancementPayload['rows'][number]): string {
     const leftSlots = Math.max(0, row.startersTotal - row.startersPlayed);
-    return `${leftSlots}/${row.startersTotal} - ${formatNumber(row.remainingBudget, 1)}m`;
+    return `${leftSlots}/${row.startersTotal} - ${formatNumber(row.remainingBudget, 1)}m${row.autoSubApplied ? '*' : ''}`;
 }
 
 function ensureNativeHeaderCells(table: HTMLTableElement): void {
@@ -226,7 +226,7 @@ function clearNativeLoading(): void {
     document.getElementById(NATIVE_LOADING_ID)?.remove();
 }
 
-function renderNativeLoading(table: HTMLTableElement, message = 'Fetching Fantasy Tool data...'): void {
+function renderNativeLoading(table: HTMLTableElement, message = 'Fetching Allsvenskan Fantasy Tool data...'): void {
     const container = getNativeContainer(table);
     clearNativeLoading();
 
@@ -243,7 +243,7 @@ function renderNativeLoading(table: HTMLTableElement, message = 'Fetching Fantas
     loading.style.opacity = '0.9';
     loading.innerHTML = `
     <span style="width:14px;height:14px;border-radius:50%;border:2px solid rgba(15,122,47,0.22);border-top-color:#0f7a2f;display:inline-block;animation: fantasy-tool-spin 0.9s linear infinite;"></span>
-    <span><strong>Fantasy Tool</strong>: ${message}</span>
+        <span><strong>Allsvenskan Fantasy Tool</strong>: ${message}</span>
   `;
 
     if (!document.getElementById('fantasy-tool-spin-style')) {
@@ -312,18 +312,22 @@ function renderNativeControls(table: HTMLTableElement, sortMode: SortMode, paylo
                 : '';
 
     const infoText = limitText.trim();
+    const autoSubNoteMarkup = payload && !payload.unsupportedReason
+        ? '<div style="font-size:12px;opacity:0.72;">* auto-sub included in the projection</div>'
+        : '';
     const infoMarkup = infoText ? `<div style="font-size:12px;opacity:0.82;">${infoText}</div>` : '';
     const sortControlsMarkup = payload?.unsupportedReason
         ? ''
         : `
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <span style="font-size:12px;opacity:0.72;">Sort:</span>
-      <button type="button" data-native-sort="official" style="border:1px solid ${sortMode === 'official' ? '#111' : 'rgba(0,0,0,0.2)'};background:${sortMode === 'official' ? '#111' : '#fff'};color:${sortMode === 'official' ? '#fff' : '#111'};border-radius:999px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer;font-weight:${sortMode === 'official' ? '700' : '500'};">Official Rank</button>
+            <button type="button" data-native-sort="official" style="border:1px solid ${sortMode === 'official' ? '#0f7a2f' : 'rgba(0,0,0,0.2)'};background:${sortMode === 'official' ? '#0f7a2f' : '#fff'};color:${sortMode === 'official' ? '#fff' : '#111'};border-radius:999px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer;font-weight:${sortMode === 'official' ? '700' : '500'};">Official Rank</button>
       <button type="button" data-native-sort="projected" style="border:1px solid ${sortMode === 'projected' ? '#0f7a2f' : 'rgba(15,122,47,0.35)'};background:${sortMode === 'projected' ? '#0f7a2f' : '#fff'};color:${sortMode === 'projected' ? '#fff' : '#0f7a2f'};border-radius:999px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer;font-weight:${sortMode === 'projected' ? '700' : '600'};">Projected Rank</button>
     </div>`;
 
     controls.innerHTML = `
     ${infoMarkup}
+        ${autoSubNoteMarkup}
     ${sortControlsMarkup}
   `;
 

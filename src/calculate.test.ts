@@ -80,6 +80,7 @@ describe('calculateEnhancedStandingRow', () => {
         expect(row.livePoints).toBe(16);
         expect(row.playedBudget).toBe(28);
         expect(row.remainingBudget).toBe(0);
+        expect(row.autoSubApplied).toBe(false);
     });
 
     it('counts dynamisk duo from chip multipliers without assuming 12 slots', () => {
@@ -334,6 +335,7 @@ describe('calculateEnhancedStandingRow', () => {
         expect(row.playedBudget).toBe(74.3);
         expect(row.startersPlayed).toBe(12);
         expect(row.startersTotal).toBe(12);
+        expect(row.autoSubApplied).toBe(true);
     });
 
     it('skips the first bench outfielder when it would break formation', () => {
@@ -493,6 +495,7 @@ describe('calculateEnhancedStandingRow', () => {
         expect(row.totalStarterBudget).toBe(71.2);
         expect(row.playedBudget).toBe(71.2);
         expect(row.pointsPerMillion).toBeCloseTo(60 / 71.2, 8);
+        expect(row.autoSubApplied).toBe(true);
     });
 
     it('moves normal captaincy to the vice-captain when the captain is a finished no-show', () => {

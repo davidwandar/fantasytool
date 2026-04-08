@@ -110,6 +110,7 @@ export interface EnrichedStandingRow {
     projectedSeasonTotal: number;
     startersPlayed: number;
     startersTotal: number;
+    autoSubApplied: boolean;
 }
 
 export interface LeagueEnhancementPayload {

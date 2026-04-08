@@ -1,8 +1,8 @@
-# Privacy Policy for Fantasy Tool
+# Privacy Policy for Allsvenskan Fantasy Tool
 
 Last updated: 2026-04-05
 
-Fantasy Tool is a Chrome extension for `fantasy.allsvenskan.se` that enhances mini league standings with additional metrics such as `Pts/M`, `Left to play`, `xP`, and `Projected Rank`.
+Allsvenskan Fantasy Tool is a Chrome extension for `fantasy.allsvenskan.se` that enhances mini league standings with additional metrics such as `Pts/M`, `Left to play`, `xP`, and `Projected Rank`.
 
 ## What Data The Extension Accesses
 
@@ -39,19 +39,19 @@ The extension uses fetched and cached data only to calculate and display enhance
 
 ## Data Sharing
 
-Fantasy Tool does not sell user data.
+Allsvenskan Fantasy Tool does not sell user data.
 
-Fantasy Tool does not share personal data with third parties.
+Allsvenskan Fantasy Tool does not share personal data with third parties.
 
 ## Remote Code
 
-Fantasy Tool does not use remote code.
+Allsvenskan Fantasy Tool does not use remote code.
 
 All executable extension code is packaged with the extension submitted to the Chrome Web Store. The extension only fetches data from `fantasy.allsvenskan.se` API endpoints and does not download or execute external scripts.
 
 ## Permissions
 
-Fantasy Tool requests the following permissions:
+Allsvenskan Fantasy Tool requests the following permissions:
 
 - `storage`: used for short-lived local caching of fantasy API responses
 - Host permission for `https://fantasy.allsvenskan.se/*`: used so the extension can run on the fantasy site and fetch the data required to enhance mini league standings
